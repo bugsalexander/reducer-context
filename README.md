@@ -1,3 +1,23 @@
+# useContext + useReducer
+
+To demonstrate the use of contexts and useReducer. Also, useImmerReducer is pretty cool too (mutate state).
+
+### Notes
+
+- can use immer to avoid having to be functional with state (convenience)
+- when creating inline object to pass to context value, use useMemo to avoid re-renders
+- TODO figure out how to avoid having to create initial state (typescript issue only)
+
+### Resources
+
+- https://www.youtube.com/watch?v=wcRawY6aJaw
+- https://www.youtube.com/watch?v=lhMKvyLRWo0
+- https://hswolff.com/blog/how-to-usecontext-with-usereducer/
+
+# CRA
+
+create-react-app reducer-context --template cra-template-typescript
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
