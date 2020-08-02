@@ -1,13 +1,15 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import Panel from "./components/Panel";
-import styled from "styled-components";
+import Panel, { LevelValues } from "./components/Panel";
+import { initialContextState } from "./components/PanelContext";
 
 function App() {
   return (
     <div>
-      <Panel></Panel>
+      <Panel
+        initialState={initialContextState()}
+        level={LevelValues.One}
+      ></Panel>
     </div>
   );
 }
