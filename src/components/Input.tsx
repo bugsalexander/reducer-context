@@ -8,7 +8,7 @@ interface InputProps {
   onChange?: (value: string) => void;
 }
 
-export function Input(props: InputProps) {
+export default function Input(props: InputProps) {
   return (
     <InputContainer>
       <input

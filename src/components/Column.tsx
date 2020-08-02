@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
-import { ValueError } from "./PanelContext";
 import styled from "styled-components";
-import { Input } from "./Input";
+import Input from "./Input";
 import { PanelContext } from "./PanelContext";
 
 interface ColumnProps {
@@ -13,7 +12,7 @@ const ColumnContainer = styled.div`
   flex-direction: column;
 `;
 
-export function Column(props: ColumnProps) {
+export default function Column(props: ColumnProps) {
   const { columnNumber } = props;
   const { state, dispatch } = useContext(PanelContext);
   const { top, high, low } = state;
