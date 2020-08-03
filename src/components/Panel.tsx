@@ -3,6 +3,7 @@ import { useImmerReducer } from "use-immer";
 import { PanelContext, PanelState, Payload } from "./PanelContext";
 import Column from "./Column";
 import styled from "styled-components";
+import { useThreshold } from "./useThreshold";
 
 interface PanelProps {
   level: LevelValues;
@@ -21,10 +22,24 @@ const Horizontal = styled.div`
 `;
 
 export default function Panel(props: PanelProps) {
-  const [state, dispatch] = useImmerReducer(stateReducer, props.initialState);
+  const [state, dispatch] = useImmerReducer(
+    stateReducerNoImmer,
+    props.initialState
+  );
   const [level, setLevel] = useState<string>(props.level);
 
-  const errors = getErrors(state);
+  // comparison errors
+  const comparisonErrorCol0 = useThreshold(state, 0);
+  const comparisonErrorCol1 = useThreshold(state, 1);
+  const comparisonErrorCol2 = useThreshold(state, 2);
+
+  const compErrors = [
+    comparisonErrorCol0,
+    comparisonErrorCol1,
+    comparisonErrorCol2,
+  ].filter((m) => !!m);
+
+  const errors = getErrors(state).concat(compErrors);
 
   // avoid creating a new object every single time
   const contextValue = useMemo(() => {
@@ -75,7 +90,8 @@ function getErrors(state: PanelState): Array<string> {
   ].filter((e) => e);
 }
 
-function stateReducer(state: PanelState, payload: Payload) {
+// eslint-disable-next-line
+function stateReducerWithImmer(state: PanelState, payload: Payload) {
   const { type, columnNumber, value } = payload;
   const target = state[type][columnNumber];
 
@@ -96,6 +112,32 @@ function stateReducer(state: PanelState, payload: Payload) {
       target.error = wrap(validate(value, checkNumber, checkPercent));
       break;
   }
+}
+
+function stateReducerNoImmer(state: PanelState, payload: Payload) {
+  const { type, columnNumber, value } = payload;
+  const values = state[type];
+
+  // set the error
+  let error: string;
+  const wrap = (message: string) =>
+    message ? `column ${columnNumber} ${type} ${message}` : "";
+  switch (type) {
+    case "top":
+      error = wrap(validate(value, checkNumber, checkNonNegative));
+      break;
+    case "high":
+      error = wrap(validate(value, checkNumber, checkPercent));
+      break;
+    case "low":
+      error = wrap(validate(value, checkNumber, checkPercent));
+      break;
+  }
+
+  return {
+    ...state,
+    [type]: values.map((v, i) => (i === columnNumber ? { value, error } : v)),
+  };
 }
 
 // validates a value with some validators (strategy pattern)
