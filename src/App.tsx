@@ -1,5 +1,4 @@
 import React from "react";
-import "./App.css";
 import Panel, { LevelValues } from "./components/Panel";
 import { initialContextState } from "./components/PanelContext";
 

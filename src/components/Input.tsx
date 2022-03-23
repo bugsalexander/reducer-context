@@ -8,15 +8,19 @@ interface InputProps {
   onChange?: (value: string) => void;
 }
 
+const StyledInput = styled.input`
+  background: ${(props) => (props.value === "3" ? "lightgreen" : "inherit")};
+`;
+
 export default function Input(props: InputProps) {
   return (
     <InputContainer>
-      <input
+      <StyledInput
         value={props.value}
         onChange={(e) =>
           props.onChange ? props.onChange(e.target.value) : undefined
         }
-      ></input>
+      ></StyledInput>
     </InputContainer>
   );
 }
